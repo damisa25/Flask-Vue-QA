@@ -7,12 +7,14 @@
             <div class="container-fluid bg-1 text-center">
                 <div id="search-container" style="color: whitesmoke;">
                     <form @submit="onSubmit" @reset="onReset">
-                        <input id= "question" type="text" placeholder="Question..." v-model="ask.question">
-                        <button id = "ask" type="sunmit">Ask</button>
+                        <input id= "question" type="text" placeholder="Question..." v-model="question">
+                        <button id = "ask" type="submit">Ask</button>
                         <button id = "reset" type="reset">Reset</button>
                     </form>
                 </div>
-                <div id="answer" v-for="(answer, index) in ans" :key="index">{{ answer.ans }}</div>
+                <div v-if="ans != null">
+                  <div id="answer" v-for="(answer, index) in ans" :key="index">{{ answer.ans }}</div>
+                </div>
             </div>
         </div>
     </div>
@@ -24,7 +26,8 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      question: String,
+      question: '',
+      ans: [],
     };
   },
   methods: {
@@ -32,7 +35,7 @@ export default {
       const path = 'http://localhost:5000/qa';
       axios.get(path)
         .then((res) => {
-          this.answer = res.data.answer;
+          this.ans = res.data.ans;
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -57,7 +60,7 @@ export default {
     onSubmit(evt) {
       evt.preventDefault();
       const payload = {
-        question: this.ask.question, // property shorthand
+        question: this.question, // property shorthand
       };
       this.askQuestion(payload);
       this.initForm();

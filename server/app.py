@@ -33,13 +33,14 @@ inverted_col = db.invertedIndex_db"""
 #pp(extracted_keywords)
 #pp(pos_question)
 #Query words from mongoDB
-
+question = ''
 
 @app.route('/qa', methods=['GET', 'POST'])
 def question_answer():
     
     if request.method == 'POST':
-        question = request.get_data()
+        post_data = request.get_json()
+        question = post_data.get('question')
         extracted_keywords, pos_question = question_preprocessing.extract_keys(question)
         words = {}
         for word in mongo.db.words_db.find({},{"_id":0}):
@@ -61,7 +62,7 @@ def question_answer():
             if term in words:
                 terms.append(term)
         if not term:
-            response_object ={'ans': 'Please give more informations'}
+            response_object ={'ans': ['Please give more informations']}
 
         filename_extracted = question_preprocessing.file_reranking(extracted_keywords,terms,words,docs,inverted_index)
         answer = answer_extraction.answer_extraction(question, pos_question, filename_extracted )
