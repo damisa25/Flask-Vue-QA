@@ -42,6 +42,7 @@ def question_answer():
 
     response_object = ''
     question1 = []
+    answer = ''
     terms = []
     er = 'Please give more informations'
     if request.method == 'POST':
@@ -58,22 +59,28 @@ def question_answer():
             if term in words:
                 terms.append(term)
         if not terms:
-            er 
             response_object = er
             print(response_object)
             return jsonify(response_object)
         filename_extracted = question_preprocessing.file_reranking(extracted_keywords,terms,words,docs,inverted_index)
-        pos_question_check = defaultdict(list)
-        for tag,value in pos_question.items():
-            for v in value:
-                if v in docs[filename_extracted]:
-                    pos_question_check[tag].append(v)
-        answer = answer_extraction.answer_extraction(str(question1), pos_question_check, filename_extracted )
-        response_object = answer
-        return jsonify(response_object)
+        if not filename_extracted:
+            answer = filename_extracted
+        else:
+            pos_question_check = defaultdict(list)
+            for tag,value in pos_question.items():
+                for v in value:
+                    if v in docs[filename_extracted]:
+                        pos_question_check[tag].append(v)
+            answer = answer_extraction.answer_extraction(str(question1), pos_question_check, filename_extracted )
+        if answer:
+            response_object = answer
+        else:
+            response_object = 'Sorry, this program cannot answer this question'
+        print(response_object)
     else:
         response_object = None
-        return jsonify(response_object)
+        
+    return jsonify(response_object)
 
 
 if __name__ == '__main__':

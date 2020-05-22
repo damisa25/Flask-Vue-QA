@@ -106,6 +106,7 @@ body, html {
   top: 150px;
   font-weight: normal;
   font-family: 'Poppins', sans-serif;
+  text-align: center;
   font-size: 20px;
   border-radius: 70px;
   border: 0px;

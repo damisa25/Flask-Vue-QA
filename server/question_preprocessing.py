@@ -68,6 +68,8 @@ def file_reranking(extractedWords, terms, words, docs, inverted_index):
     #pp(terms)
     
     relevant_docs = sorted(matchedkeywords(terms, words, docs, inverted_index))
+    if not relevant_docs:
+        return relevant_docs
     words_in_file= []
     score = []
     score_doc = []
