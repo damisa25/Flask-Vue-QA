@@ -13,56 +13,39 @@ import logging
 
 logging.basicConfig(level=logging.DEBUG)
 
-
 # configuration
 DEBUG = True
 
 # instantiate the app
 app = Flask(__name__)
 app.config['MONGO_DBNAME'] = 'db'
-app.config['MONGO_URI'] = 'mongodb+srv://dbDamisa:damisa.25@nlp-ipjo1.mongodb.net/test?retryWrites=true&w=majority'
-"""CONNECTION_STRING = "mongodb+srv://dbDamisa:damisa.25@nlp-ipjo1.mongodb.net/test?retryWrites=true&w=majority"
-client = pymongo.MongoClient(CONNECTION_STRING)
-db = client.get_database('db')
-docs_col = pymongo.collection.Collection(db, 'docs_db')
-words_col = pymongo.collection.Collection(db, 'words_db')
-invertedIndex_col = pymongo.collection.Collection(db, 'invertedIndex_db')"""
+app.config['MONGO_URI'] = 'mongodb+srv://dbDamisa:damisa.25@nlp-ipjo1.mongodb.net/db?retryWrites=true&w=majority'
+
 mongo = PyMongo(app)
-# enable CORS
+
 CORS(app, resources={r'/*': {'origins': '*'}})
 
-""" Create connection to MongoDB database """
-"""client = MongoClient('mongodb+srv://dbDamisa:damisa.25@nlp-ipjo1.mongodb.net/test?retryWrites=true&w=majority')
-
-db = client.db
-docs_col = db.docs_db
-words_col = db.words_db
-inverted_col = db.invertedIndex_db"""
-# sanity check route
- #Example
-
-#pp(extracted_keywords)
-#pp(pos_question)
-#Query words from mongoDB
-terms = []
 
 @app.route('/qa', methods=['GET', 'POST'])
 def question_answer():
 
     words = {}
-    for word in mongo.db.words_col.find({},{"_id":0}):
+    for word in mongo.db.words_db.find({},{"_id":0}):
         words.update(word)
     words = [v for v in words.keys()] 
     docs = {}
-    for doc in mongo.db.docs_col.find({},{"_id":0}):
+    for doc in mongo.db.docs_db.find({},{"_id":0}):
         docs.update(doc)
     inverted_index = {}
-    for index in mongo.db.invertedIndex_col.find({},{"_id":0}):
+    for index in mongo.db.invertedIndex_db.find({},{"_id":0}):
         inverted_index.update(index)
-        
-    print(words)
+
+    response_object = ''
     question1 = []
+    terms = []
+    er = 'Please give more informations'
     if request.method == 'POST':
+        
         post_data = request.get_json()
         question1.append(post_data.get('question'))
         #question = question1['question']
@@ -74,8 +57,10 @@ def question_answer():
         for term in extracted_keywords:
             if term in words:
                 terms.append(term)
-        if not term:
-            response_object ={'ans': ['Please give more informations']}
+        if not terms:
+            er 
+            response_object = er
+            print(response_object)
             return jsonify(response_object)
         filename_extracted = question_preprocessing.file_reranking(extracted_keywords,terms,words,docs,inverted_index)
         pos_question_check = defaultdict(list)
@@ -84,10 +69,11 @@ def question_answer():
                 if v in docs[filename_extracted]:
                     pos_question_check[tag].append(v)
         answer = answer_extraction.answer_extraction(str(question1), pos_question_check, filename_extracted )
-        response_object ={'ans': answer}
+        response_object = answer
+        return jsonify(response_object)
     else:
-        response_object ={'ans': ''}
-    return jsonify(response_object).get_data(as_text=True)
+        response_object = None
+        return jsonify(response_object)
 
 
 if __name__ == '__main__':

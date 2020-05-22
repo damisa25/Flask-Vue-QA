@@ -1,23 +1,40 @@
 <template>
 <!-- eslint-disable max-len -->
-    <div id="background">
-        <div class="container">
-            <h1 id= h1>SONG Question Answering  <img src="../assets/question.png" width="50px" height="50px"></h1>
-            <hr><br>
-            <div class="container-fluid bg-1 text-center">
-                <div id="search-container" style="color: whitesmoke;">
-                    <form @submit="onSubmit" @reset="onReset">
-                        <input id= "question" type="text" placeholder="Question..." v-model="question">
-                        <button id = "ask" type="submit">Ask</button>
-                        <button id = "reset" type="reset">Reset</button>
-                    </form>
-                </div>
-                <div v-if="ans != null">
-                  <div id="answer" v-for="(answer, index) in ans" :key="index">{{ answer.ans }}</div>
-                </div>
-            </div>
+  <div>
+    <div>
+      <div class="container">
+        <div  id="navbar-header">
+          <img src="../assets/question.png"  width="70px" height="70px" >
+          <a id="navbar-name">Song Question Answering</a>
         </div>
+      </div>
+      <br><br><br><br>
+      <h5 id="lefttext">CPE372   Natural  Laguage Processing</h5>
+      <br><br><br><br>
+      <h3 id="margin">Let’s ask some questions about your interesting songs ! </h3>
+      <br><br><br><br>
+      <h4 id="margin2">Song Question and Answering is the system that collects all data about English songs.
+                <br>Please type something that you interested about song!  We can help you find it.</h4>
+      <br>
+      <div class="container-fluid bg-1 text-center">
+        <div id="search-container" style="color: whitesmoke;">
+          <form>
+            <input id= "question" type="text" v-model="question">
+          </form>
+        </div>
+        <form @submit="onSubmit" @reset="onReset">
+          <button id = "ask" type="submit">Ask</button>
+          <button id = "reset" type="reset">Reset</button>
+        </form>
+        <div id="search-img">
+          <img src="../assets/search.png"  width="35px" height="35px">
+        </div>
+        <div v-if="answer!=null">
+          <div id="answer">{{answer}}</div>
+        </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -27,7 +44,7 @@ export default {
   data() {
     return {
       question: '',
-      ans: [],
+      answer: null,
     };
   },
   methods: {
@@ -35,7 +52,7 @@ export default {
       const path = 'http://localhost:5000/qa';
       axios.get(path)
         .then((res) => {
-          this.ans = res.data.ans;
+          this.answer = res.data.answer;
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -77,87 +94,157 @@ export default {
 </script>
 
 <style>
-#background {
-    right: 0;
-    bottom: 0;
-    min-width: 100%;
-    min-height: 100%;
-    width: auto;
-    height: auto;
-    z-index: -100;
-    font: monospace;
+body, html {
+  height: 100%;
+  margin: 0;
+  font-family: Poppins;
 }
-#h1{
-    color: rosybrown;
-    font-family: "Lucida Console", Courier, monospace;
-}
+
 #question {
-  color: #ffffff;
+  color: #7173C5;
+  font-style: normal;
+  font-weight: normal;
+  font-family: 'Poppins', sans-serif;
   font-size: 20px;
-  margin-right: 10px;
-  border-radius: 15px;
+  border-radius: 70px;
   border: 0px;
-  background-color: #f3dcfb;
-  background-image: linear-gradient(to bottom right, #f3dcfb, lightskyblue);
-  font-family: "Lucida Console", Courier, monospace;
   padding: 25px;
-  color:darkslategray;
   float: center;
-  width: 620px;
-  height: 10px;
+  background: #FFFFFF;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.08);
+  width: 890px;
+  height: 70px;
 }
 #search-container {
   float: center;
 }
 #ask {
   float: center;
-  color: white;
-  padding: 10px;
-  margin-top: 8px;
-  margin-right: 10px;
-  background: indianred;
-  border-radius: 15px;
+  color: #F9F3EC;
+  text-align: center;
+  top:410px;
+  position: absolute;
+  font-family: 'Poppins', sans-serif;
+  font-style: normal;
+  font-weight: normal;
   font-size: 18px;
-  border: none;
+  line-height: 27px;
+  background: rgba(104, 102, 200, 0.7);
+  border: 3px solid #7173C5;
+  border-radius: 20px;
+  padding-top:0px;
   cursor: pointer;
-  padding-top: 12px;
-  padding-bottom: 12px;
-  font-family: "Lucida Console", Courier, monospace;
-  padding-left: 18px;
-  padding-right: 18px;
+  width: 115px;
+  height: 35px;
+  left: 535px;
 }
 #ask:hover {
-  background: crimson;
+  background: #7173C5;
+  text-shadow: salmon;
 }
 #reset {
   float: center;
-  color: white;
-  padding: 10px;
-  margin-top: 8px;
-  background: cornflowerblue;
-  font-family: "Lucida Console", Courier, monospace;
-  border-radius: 15px;
+  color: rgba(104, 102, 200, 0.8);
+  float: center;
+  top:408px;
+  text-align: center;
+  position: absolute;
+  font-family: 'Poppins', sans-serif;
+  font-style: normal;
+  font-weight: normal;
   font-size: 18px;
-  border: none;
+  line-height: 27px;
+  background: #F9F3EC;
+  border: 3px solid #F5EEF8;
+  border-radius: 20px;
   cursor: pointer;
-  padding-top: 12px;
-  padding-bottom: 12px;
-  padding-left: 12px;
-  padding-right: 12px;
+  width: 115px;
+  height: 40px;
+  left: 665px;
 }
 #reset:hover {
-  background: royalblue;
+  background  : #eee0ff;
 }
 #answer {
   float: center;
-  background-color: #f3dcfb;
-  font-family: "Lucida Console", Courier, monospace;
-  border-radius: 15px;
+  color: #7173C5;
+  font-weight: 500;
+  font-size: 24px;
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+  background: rgba(210, 209, 236, 0.18);
+  border: 2px solid rgba(104, 102, 200, 0.28);
+  border-radius: 30px;
   font-size: 20px;
-  width: 620px;
-  height: 420px;
+  width: 740px;
+  height: 280px;
   padding: 30px;
-  margin-top: 30px;
-  margin-left: 150px;
+  margin-top: 95px;
+  margin-left: 285px;
+}
+#navbar-header {
+    position: absolute;
+    width: 72px;
+    height: 71px;
+    left: 60px;
+    top: 30px;
+}
+
+#navbar-name {
+    /* Song Question Answering */
+    position: absolute;
+    width: 314px;
+    left: 90px;
+    margin-top:15px;
+    font-family: 'Poppins', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 36px;
+    color: #545772;
+    }
+#lefttext {
+    top: 55px;
+    right: 40px;
+    position: absolute;
+    font-family: 'Poppins', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    color: #545772;
+  }
+
+
+#margin {
+    position: absolute;
+    width: 669px;
+    height: 36px;
+    left: 340px; /*378*/
+    top:180px;
+    font-family: 'Poppins', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 36px;
+    text-align: center;
+    color: rgba(104, 102, 200, 0.8);
+    }
+#margin2 {
+    position: absolute;
+    top:230px;
+    font-family: 'Poppins', sans-serif;
+    left: 285px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 27px;
+    text-align: center;
+    color: #5F5F5F;
+  }
+#search-img {
+  /* ion:search */
+  position: absolute;
+  left: 250px; /*316*/
+  top:330px;
 }
 </style>
