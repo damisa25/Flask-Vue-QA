@@ -41,26 +41,22 @@ def question_answer():
         inverted_index.update(index)
 
     response_object = ''
-    question1 = []
+    question = ''
     answer = ''
     terms = []
     er = 'Please give more informations'
     if request.method == 'POST':
         
-        post_data = request.get_json()
-        question1.append(post_data.get('question'))
-        #question = question1['question']
-        print(post_data)
-        print(question1)
-
-        extracted_keywords, pos_question = question_preprocessing.extract_keys(question1)
+        post_data = request.get_json(force=True)
+        question = post_data['question']
         
+        extracted_keywords, pos_question = question_preprocessing.extract_keys(question)
+            
         for term in extracted_keywords:
             if term in words:
                 terms.append(term)
         if not terms:
             response_object = er
-            print(response_object)
             return jsonify(response_object)
         filename_extracted = question_preprocessing.file_reranking(extracted_keywords,terms,words,docs,inverted_index)
         if not filename_extracted:
@@ -71,12 +67,11 @@ def question_answer():
                 for v in value:
                     if v in docs[filename_extracted]:
                         pos_question_check[tag].append(v)
-            answer = answer_extraction.answer_extraction(str(question1), pos_question_check, filename_extracted )
+            answer = answer_extraction.answer_extraction(question, pos_question_check, filename_extracted )
         if answer:
             response_object = answer
         else:
             response_object = 'Sorry, this program cannot answer this question'
-        print(response_object)
     else:
         response_object = None
         

@@ -30,7 +30,7 @@
           <img src="../assets/search.png"  width="35px" height="35px">
         </div>
         <div v-if="answer!=null">
-          <div id="answer">{{answer}}</div>
+          <div id="answer" style="text-align:center;">{{answer}}</div>
         </div>
       </div>
     </div>
@@ -48,31 +48,23 @@ export default {
     };
   },
   methods: {
-    getAnswer() {
-      const path = 'http://localhost:5000/qa';
-      axios.get(path)
-        .then((res) => {
-          this.answer = res.data.answer;
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.error(error);
-        });
-    },
     askQuestion(payload) {
       const path = 'http://localhost:5000/qa';
-      axios.post(path, payload)
-        .then(() => {
-          this.getAnswer();
+      axios.post(path, payload, { headers: {} })
+        .then((res) => {
+          /* eslint-disable no-console */
+          console.log(res);
+          /* eslint-enable no-console */
+          this.answer = res.data;
         })
         .catch((error) => {
           // eslint-disable-next-line
           console.log(error);
-          this.getAnswer();
         });
     },
     initForm() {
       this.question = '';
+      this.answer = null;
     },
     onSubmit(evt) {
       evt.preventDefault();
@@ -80,7 +72,6 @@ export default {
         question: this.question, // property shorthand
       };
       this.askQuestion(payload);
-      this.initForm();
     },
     onReset(evt) {
       evt.preventDefault();
@@ -88,7 +79,7 @@ export default {
     },
   },
   created() {
-    this.getAnswer();
+    this.askQuestion();
   },
 };
 </script>
@@ -179,14 +170,16 @@ body, html {
   text-align: center;
   font-family: 'Poppins', sans-serif;
   background: rgba(210, 209, 236, 0.18);
-  border: 2px solid rgba(104, 102, 200, 0.28);
+  border: 5px solid rgba(104, 102, 200, 0.28);
   border-radius: 30px;
   font-size: 20px;
-  width: 740px;
-  height: 280px;
+  width: 700px;
+  height: auto;
   padding: 30px;
-  margin-top: 95px;
-  margin-left: 285px;
+  top: 75%;
+  left: 35%;
+  margin-left: -150px;
+  margin-top: -100px;
 }
 #navbar-header {
     position: absolute;

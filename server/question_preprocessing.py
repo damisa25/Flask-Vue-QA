@@ -30,12 +30,9 @@ remove = ["?", "-",".",",","'","[","]","(",")","!","``","/",";",":","‘" ]
 """ Extract keywords : tokenization, POS-tagging, stop word removal, stemming"""
 def extract_keys(question):
     """ Keywords """
-    q = ''
-    for ele in question:  
-        q += ele   
     
     # return string   
-    tokens_keywords = word_tokenize(q)
+    tokens_keywords = word_tokenize(question)
     extracted_keywords_index = [lemmatizer.lemmatize(element.lower()) for element in tokens_keywords 
                             if element not in stop_word and element not in remove and element not in q_words]
   

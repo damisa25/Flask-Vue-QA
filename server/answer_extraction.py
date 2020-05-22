@@ -104,16 +104,13 @@ def check_match_pos(pos_question, pos_sentences):
 """ Matched POS tagging and check Named Entity"""
 def answer_extraction(question, pos_question, filename_extracted):
     global counter
-    with open('Songs/'+filename_extracted+'.txt', 'r') as f:
+    with open('songs/'+filename_extracted+'.txt', 'r') as f:
         doc = f.read()
 
-    q = ''
-    for ele in question:  
-        q += ele 
         
     sentences = nltk.sent_tokenize(doc)
     
-    ner_question, ner_sentences = named_entities(q, sentences)
+    ner_question, ner_sentences = named_entities(question, sentences)
     pos_sentences = pos_tagged_docs(sentences)
  
     matched_index = check_match_pos(pos_question, pos_sentences)
