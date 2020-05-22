@@ -103,6 +103,7 @@ body, html {
 #question {
   color: #7173C5;
   font-style: normal;
+  top: 150px;
   font-weight: normal;
   font-family: 'Poppins', sans-serif;
   font-size: 20px;
@@ -117,6 +118,8 @@ body, html {
 }
 #search-container {
   float: center;
+  left: 220px;
+  position: absolute;
 }
 #ask {
   float: center;
@@ -147,6 +150,7 @@ body, html {
   color: rgba(104, 102, 200, 0.8);
   float: center;
   top:408px;
+  position: absolute;
   text-align: center;
   position: absolute;
   font-family: 'Poppins', sans-serif;
@@ -168,6 +172,7 @@ body, html {
 #answer {
   float: center;
   color: #7173C5;
+  position: absolute;
   font-weight: 500;
   font-size: 24px;
   text-align: center;
